@@ -1,72 +1,36 @@
+import { connect } from 'react-redux';
+import {
+  addBucket,
+  addTask,
+  doneTask,
+  removeTask,
+} from './actions'
 import React from 'react';
 import { TodoList } from './Components/TodoList';
 import { InputForm } from './Components/InputForm';
 import './TodoBucketApp.css'
-
 export class TodoBucketApp extends React.Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      buckets: [], // [{ name: '', items: [] }]
-    }
-  }
-
   addBucket = (bucketName) => {
     if (!bucketName) {
       return;
     }
-
-    const { buckets } = this.state;
-
-    this.setState({
-      buckets: [
-        { name: bucketName, items: [] },
-        ...buckets
-      ]
-    })
+    this.props.addBucketDispatch({ name: bucketName })
   }
 
   addItem = (value, bucketIndex) => {
-    const {
-      buckets
-    } = this.state;
-    
-    const bucket = buckets[bucketIndex];
-
-    bucket.items = [{
-      done: false,
-      value,
-    }, ...bucket.items]
-
-    this.setState({ buckets: [...buckets] });
+    this.props.addTaskDispatch({ value, bucketIndex })
   }
 
-  removeItem = (itemIndex, bucketIndex) => {
-    const {
-      buckets
-    } = this.state;
-
-    const bucket = buckets[bucketIndex];
-    bucket.items.splice(itemIndex, 1);
-
-    this.setState({ buckets: [...buckets] });
-
+  removeItem = (taskIndex, bucketIndex) => {
+    this.props.removeTaskDispatch({ taskIndex, bucketIndex })
   }
 
-  markTodoDone = (itemIndex, bucketIndex) => {
-    const {
-      buckets
-    } = this.state;
-
-    const bucket = buckets[bucketIndex];
-    var item = bucket.items[itemIndex];
-    item.done = !item.done;
-
-    this.setState({ buckets: [...buckets] });
+  markTodoDone = (taskIndex, bucketIndex) => {
+    this.props.doneTaskDispatch({ taskIndex, bucketIndex })
   }
 
   render() {
-    const { buckets } = this.state;
+    const { buckets } = this.props;
 
     const todoListElements = buckets.map((bucket, i) => {
       return <TodoList
@@ -94,4 +58,19 @@ export class TodoBucketApp extends React.Component {
 }
 
 
-export default TodoBucketApp;
+function mapStateToProps(state, props) {
+  const {
+    buckets
+  } = state;
+
+  return {
+    buckets
+  };
+}
+
+export default connect(mapStateToProps, {
+  addBucketDispatch: addBucket,
+  addTaskDispatch: addTask,
+  doneTaskDispatch: doneTask,
+  removeTaskDispatch: removeTask,
+})(TodoBucketApp);
