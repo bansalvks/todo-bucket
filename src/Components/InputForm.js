@@ -15,15 +15,13 @@ export class InputForm extends React.Component {
             this.refs.form.reset();
         }
     }
-    
+
     render() {
         const { buttonText } = this.props;
 
-        return (
-            <form ref="form" onSubmit={this.onSubmit} className="form-inline">
-                <input type="text" ref="itemName" className="form-control" placeholder="type..." />
-                <button type="submit" className="btn btn-default">{buttonText}</button>
-            </form>
-        );
+        return (<form ref="form" className="input-form input-form-inline" onSubmit={this.onSubmit}>
+            <input type="text" placeholder="type..." ref="itemName" className="form-control text" />
+            <button type="submit" className="btn btn-default submit">{buttonText}</button>
+        </form>)
     }
 }

@@ -1,3 +1,42 @@
-.bucket-form{
-    margin-top: 20px;
+.main {
+    width: 100%;
+    height: 100vh;
+}
+
+.left {
+    width: 40%;
+    height: 100%;
+    background: sandybrown;
+    float: left;
+}
+
+.right {
+    width: 60%;
+    height: 100%;
+    background: snow;
+    float: left;
+    padding: 20px;
+}
+
+.input-form-inline {
+    width: 100%;
+    display: inline-block;
+}
+
+.input-form {
+    padding: 10px;
+}
+
+.input-form .text {
+    float: left;
+    width: 60%;
+}
+
+.input-form .submit {
+    float: left;
+    width: 40%;
+}
+
+.bucket-items {
+    margin: 10px;
 }

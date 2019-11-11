@@ -11,14 +11,13 @@ export function TodoList({
     bucketIndex,
 }) {
 
-    return (<div id="main">
-        <TodoHeader heading={bucket.name} />
+    return (<div id="todo-bucket">
+        <InputForm buttonText='Create Task' onValueChange={addItem} />
         <Tasks
             items={bucket.items}
             removeItem={removeItem}
             markTodoDone={markTodoDone}
             bucketIndex={bucketIndex}
         />
-        <InputForm buttonText='Create Task' onValueChange={addItem} />
     </div>)
 }
