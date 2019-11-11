@@ -1,16 +1,30 @@
 import { TODO_ACTIONS } from './actions';
 
-const initialState = {
+const LOCAL_STORAGE_BUCKET = 'buckets'
+
+let localState = [];
+
+try {
+    localState = JSON.parse(localStorage.getItem(LOCAL_STORAGE_BUCKET))
+} catch (error) {
+
+}
+
+const initialState = localState || {
     buckets: []
 };
 
 const TodoReducer = (state = initialState, action = {}) => {
+
+    let changes = {};
+
     switch (action.type) {
         case TODO_ACTIONS.ADD_BUCKET: {
             const { buckets } = state;
-            return {
+            changes = {
                 buckets: [{ name: action.name, items: [] }, ...buckets]
             }
+            break;
         }
         case TODO_ACTIONS.ADD_TASK: {
             const { buckets } = state;
@@ -24,10 +38,10 @@ const TodoReducer = (state = initialState, action = {}) => {
 
             buckets[action.bucketIndex] = taskBucket;
 
-            return {
+            changes = {
                 buckets: [...buckets]
             }
-
+            break;
         }
         case TODO_ACTIONS.REMOVE_TASK: {
             const { buckets } = state;
@@ -35,9 +49,10 @@ const TodoReducer = (state = initialState, action = {}) => {
 
 
             taskBucket.items.splice(action.taskIndex, 1);
-            return {
+            changes = {
                 buckets: [...buckets]
             };
+            break;
         }
         case TODO_ACTIONS.DONE_TASK: {
             const { buckets } = state;
@@ -46,12 +61,21 @@ const TodoReducer = (state = initialState, action = {}) => {
             const item = taskBucket.items[action.taskIndex];
             item.done = !item.done;
 
-            return {
+            changes = {
                 buckets: [...buckets]
             };
+            break;
         }
         default:
             return state;
+    }
+
+    if (Object.keys(changes).length > 0) {
+        localStorage.setItem(LOCAL_STORAGE_BUCKET, JSON.stringify(changes || {}))
+        return changes;
+    }
+    else {
+        return state;
     }
 };
 
